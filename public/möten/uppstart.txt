@@ -1,0 +1,32 @@
+Mötesanteckningar – 8/12/2025
+
+Deltagare:
+Arvid
+
+Filippa
+
+
+Agenda:
+Fördela ansvar för projektets huvuddelar
+
+Bestämma initiala uppgifter (setup, wireframe, planering)
+
+Ansvarsfördelning:
+Arvid: Event Planner‑modulen
+
+Filippa: Todos & Activities‑modulen
+
+Lone: Habits‑modulen
+
+Beslutade aktiviteter:
+Filippa tar fram en snabb wireframe baserad på kravställningen för att ge en visuell översikt av projektet.
+
+Arvid skapar GitHub‑repo och sätter upp Trello‑board med kolumnerna Sprint 1, Sprint 2, In Progress, Ready for Test, Done.
+
+Alla ansvarar för att uppdatera backloggen med relevanta kort för respektive modul.
+
+Nästa steg
+
+Dokumentera kommande standups (tid, deltagare, diskussioner).
+
+Förbereda inför retrospektiv efter Sprint 1.
