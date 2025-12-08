@@ -112,7 +112,7 @@ För **VG‑nivå** krävs inloggning med användarhantering, lagring av data pe
    ```bash
    git clone <repo-url>
    cd <repo-folder>
-   ```bash
+   ```
 
 2. Installera beroenden
    ```bash
