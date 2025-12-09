@@ -3,7 +3,13 @@ const isUserLoggedIn = () => {
 };
 
 const logOutUser = () => {
-  localStorage.removeItem('userToken');
+  const user = localStorage.removeItem('userToken');
+  if (!user) {
+    return {loggedOut: true, message: "Ingen användare är inloggad."};
+  } else {
+    localStorage.removeItem('userToken');
+    return {loggedOut: true, message: "Användaren har loggats ut."};
+  }
 };
 
 const loginUser = (data) => {

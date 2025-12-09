@@ -46,7 +46,7 @@ const SignUp = () => {
               className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-black ${
                 error ? "border-red-500" : "border-gray-300"
               }`}
-              placeholder="Skriv ditt användarnamn"
+              placeholder="Välj ditt användarnamn"
               required
             />
           </div>
@@ -65,7 +65,7 @@ const SignUp = () => {
               onChange={(e) => setPassword(e.target.value)}
               className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-black border-gray-300
               `}
-              placeholder="Skriv ditt lösenord"
+              placeholder="Välj ditt lösenord"
               required
             />
           </div>
