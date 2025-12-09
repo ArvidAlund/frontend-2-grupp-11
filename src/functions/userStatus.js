@@ -11,7 +11,7 @@ const loginUser = (data) => {
   const accounts = Array.isArray(users) ? users : [];
   const user = accounts.find(acc => acc.username === data.username && acc.password === data.password);
   if (!user) {
-    return {loggedIn: false, id: null};
+    return {loggedIn: false, id: null, message: "Inloggning misslyckades. Kontrollera ditt användarnamn och lösenord."};
   }
   const token = {
     id: user.id,
@@ -60,4 +60,25 @@ const getUsers = () => {
   }
 };
 
-export { isUserLoggedIn, logOutUser, loginUser, getUsers };
+const createUser = (username, password) => {
+  const users = getUsers();
+  const existingUser = users.find(user => user.username === username);
+  if (existingUser) {
+    return {success: false, message: "Användarnamnet är redan taget."};
+  }
+  const newUser = {
+    id: users.length + 1,
+    username,
+    password
+  };
+  users.push(newUser);
+  localStorage.setItem('users', JSON.stringify(users));
+  const token = {
+    id: newUser.id,
+    expiry: new Date().getTime() + 3600000 // 1 hour
+  };
+  localStorage.setItem('userToken', JSON.stringify(token));
+  return {success: true, id: newUser.id};
+}
+
+export { isUserLoggedIn, logOutUser, loginUser, getUsers, createUser };
