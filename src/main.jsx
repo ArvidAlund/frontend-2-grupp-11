@@ -4,15 +4,17 @@ import './index.css'
 import Home from './pages/home.jsx'
 import Todos from './pages/todos.jsx'
 import Habits from './pages/habits.jsx'
+import Login from './pages/login.jsx'
 import EventPlanner from './pages/EventPlanner.jsx'
 
 createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <Routes>
-      <Route path="/*" element={<Home />} />
+      <Route path="/" element={<Home />} />
       <Route path="/todos" element={<Todos />} />
       <Route path="/habits" element={<Habits />} />
       <Route path="/event-planner" element={<EventPlanner />} />
+      <Route path='/login' element={<Login />} />
     </Routes>
   </BrowserRouter>
 )
