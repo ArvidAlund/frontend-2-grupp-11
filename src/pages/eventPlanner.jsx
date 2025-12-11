@@ -1,13 +1,13 @@
 import { useState, useEffect } from "react";
 import { isUserLoggedIn } from "../lib/auth";
-import { getEventsUserID, getGenericEvents, createEvent } from "../lib/events";
-import CreateEventModal from "../components/createEventsModal";
+import { getEventsUserID, getGenericEvents } from "../lib/events";
+import CreateEventModal from "../components/events/createEventsModal";
+import EventContainer from "../components/events/eventContainer";
 
 const EventPlanner = () => {
   const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);
-  const [filter, setFilter] = useState("coming");
   const [createEventModalOpen, setCreateEventModalOpen] = useState(false);
 
   useEffect(() => {
@@ -46,32 +46,34 @@ const EventPlanner = () => {
       <h1 className="mb-10 text-center font-bold">Event Planner</h1>
         <div>
           <h2>{userId ? "Dina Events" : "Generella Events"}</h2>
-          <div className="flex justify-between my-4">
+          <div className="flex justify-center my-4">
             <button onClick={() => setCreateEventModalOpen(true)}>Skapa event</button>
-            <select name="filter" id="filter" className="*:bg-black" onChange={(e) => setFilter(e.target.value)} value={filter}>
-              <option value="coming">Kommande</option>
-              <option value="past">Tidigare</option>
-            </select>
           </div>
           {events.length > 0 ? (
-            <ul>
-              {events.sort((a, b) => {
-                if (filter === "past") {
-                  return new Date(a.startDate) - new Date(b.startDate);
-                } else if (filter === "coming") {
-                  return new Date(b.startDate) - new Date(a.startDate);
-                }
-                return 0;
-              }).map((event) => (
-                <li key={event.id} className="border-b py-2">
-                  <h3 className="mb-2">{event.title}</h3>
-                  <p>{event.description}</p>
-                  <p>
-                    Från: {new Date(event.startDate).toLocaleString()} <br /> Till: {new Date(event.endDate).toLocaleString()}
-                  </p>
-                </li>
-              ))}
-            </ul>
+            <div className="grid grid-cols-2 gap-10 max-w-[800px] mx-auto">
+              <div>
+              <h3 className="mb-4 border-b-2 border-neutral-700">Kommande Events</h3>
+              <ul>
+                {events.filter(event => {
+                  if (event.endDate >= new Date().toISOString()) {
+                    return event;
+                  }}).sort((a, b) => new Date(a.endDate) - new Date(b.endDate)).map(event => (
+                  <EventContainer key={event.id} event={event} />
+                ))}
+              </ul>
+              </div>
+              <div>
+              <h3 className="mb-4 border-b-2 border-neutral-700">Tidigare Events</h3>
+              <ul>
+                {events.filter(event => {
+                  if (event.endDate < new Date().toISOString()) {
+                    return event;
+                  }}).sort((a, b) => new Date(b.endDate) - new Date(a.endDate)).map(event => (
+                  <EventContainer event={event} key={event.id} />
+                ))}
+              </ul>
+              </div>
+            </div>
           ) : (
             <p>Inga events hittade</p>
           )}

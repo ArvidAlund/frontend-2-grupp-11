@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { createEvent, getEventsUserID } from "../lib/events";
+import { createEvent, getEventsUserID } from "../../lib/events";
 
 
 const CreateEventModal = ({onClose, userId}) => {
