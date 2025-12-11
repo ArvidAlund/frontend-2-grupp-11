@@ -3,6 +3,7 @@ import { isUserLoggedIn } from "../lib/auth";
 import { getEventsUserID, getGenericEvents } from "../lib/events";
 import CreateEventModal from "../components/events/createEventsModal";
 import EventContainer from "../components/events/eventContainer";
+import EditEvent from "../components/events/editEvent";
 
 const EventPlanner = () => {
   const [userId, setUserId] = useState(null);
@@ -10,6 +11,7 @@ const EventPlanner = () => {
   const [events, setEvents] = useState([]);
   const [createEventModalOpen, setCreateEventModalOpen] = useState(false);
   const [sortOption, setSortOption] = useState("coming");
+  const [updateEvent, setUpdateEvent] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -60,12 +62,18 @@ const EventPlanner = () => {
               {sortOption && (
               <ul>
                 {events.filter(event => {
-                  if (event.endDate >= new Date().toISOString() && sortOption === "coming") {
-                    return event;
-                  } else if (sortOption === "past" && event.endDate < new Date().toISOString()) {
-                    return event;
-                  }}).map(event => (
-                  <EventContainer key={event.id} event={event} />
+                  const now = new Date();
+                  const start = new Date(event.startDate);
+                  const end = new Date(event.endDate);
+
+                  if (sortOption === "coming") {
+                    return start >= now;
+                  } else if (sortOption === "past") {
+                    return end < now;
+                  }
+                  return false;
+                }).map(event => (
+                  <EventContainer key={event.id} event={event} onClick={() => setUpdateEvent(event)} type={sortOption} />
                 ))}
               </ul>
               )}
@@ -81,6 +89,14 @@ const EventPlanner = () => {
               setEvents(updatedEvents);
             }
           }} userId={userId} />
+        )}
+        {updateEvent !== null && (
+          <EditEvent event={updateEvent} onClose={(updatedEvents) => {
+            setUpdateEvent(null);
+            if (updatedEvents) {
+              setEvents(updatedEvents);
+            }
+          }} />
         )}
     </section>
   );
