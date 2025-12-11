@@ -8,6 +8,16 @@ const getEventsUserID = (userId) => {
     }
 };
 
+const getGenericEvents = () => {
+    let events = localStorage.getItem('events');
+    if (!events) {
+        return [];
+    } else {
+        events = JSON.parse(events);
+        return events.filter(event => !event.userId);
+    }
+};
+
 const createEvent = (userId, title, startDate, endDate, description) => {
     let events = localStorage.getItem('events');
     if (!events) {
@@ -15,9 +25,10 @@ const createEvent = (userId, title, startDate, endDate, description) => {
     } else {
         events = JSON.parse(events);
     }
+    
     const newEvent = {
         id: events.length + 1,
-        userId,
+        userId: userId ? userId : null,
         title,
         startDate,
         endDate,
@@ -44,4 +55,4 @@ const deleteEvent = (eventId, userId) => {
 };
 
 
-export { getEventsUserID, createEvent, deleteEvent };
+export { getEventsUserID, getGenericEvents, createEvent, deleteEvent };
