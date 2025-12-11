@@ -66,6 +66,12 @@ const getUsers = () => {
   }
 };
 
+const getUserbyId = (userId) => {
+  const users = getUsers();
+  const user = users.find(user => user.id === userId);
+  return user ? user : null;
+};
+
 const createUser = (username, password) => {
   const users = getUsers();
   const existingUser = users.find(user => user.username === username);
@@ -87,4 +93,4 @@ const createUser = (username, password) => {
   return {success: true, id: newUser.id};
 }
 
-export { isUserLoggedIn, logOutUser, loginUser, getUsers, createUser };
+export { isUserLoggedIn, logOutUser, loginUser, getUsers, createUser, getUserbyId };
