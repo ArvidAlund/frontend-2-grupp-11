@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { loginUser } from "../functions/userStatus";
+import { loginUser } from "../lib/auth";
 import { useState } from "react";
 
 const Login = () => {

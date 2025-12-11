@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { useState } from "react";
-import { createUser } from "../functions/userStatus";
+import { createUser } from "../lib/auth";
 
 const SignUp = () => {
   const [error, setError] = useState(null);
