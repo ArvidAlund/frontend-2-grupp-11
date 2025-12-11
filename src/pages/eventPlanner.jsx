@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { isUserLoggedIn } from "../functions/userStatus";
+import { isUserLoggedIn } from "../lib/userStatus";
 
 const EventPlanner = () => {
   const [userId, setUserId] = useState(null);
