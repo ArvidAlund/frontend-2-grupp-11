@@ -4,7 +4,7 @@ const EventContainer = ({ event }) => {
   return (
     <li
       className={`rounded-lg shadow-md p-4 mb-4 transition text-black select-none cursor-pointer
-        ${isPast ? "bg-neutral-100 text-neutral-500 hover:bg-neutral-200" : "bg-white hover:shadow-lg hover:bg-neutral-300"}`
+        bg-white hover:shadow-lg hover:bg-neutral-300`
       }
     >
       <div className="flex justify-between items-center mb-2">
