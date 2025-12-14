@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { deleteEvent, updateEvent } from "../../lib/events";
+import { X } from "lucide-react";
 
 const formatDateForInput = (date) => {
   const d = new Date(date);
@@ -44,27 +45,32 @@ const EditEvent = ({event, onClose}) => {
     };
 
     return (
-        <div className="fixed inset-0 bg-black/20 backdrop-blur-xs flex items-center justify-center">
-            <div className="bg-neutral-800 p-10 rounded-lg text-white">
-                <h2>Redigera event: {event.title}</h2>
-                <form className="flex flex-col gap-8 my-4 *:flex *:flex-col [&>div]:text-start [&>div>input]:p-2 [&>div>input]:rounded-md [&>div>input]:border [&>div>textarea]:p-2 [&>div>textarea]:rounded-md [&>div>textarea]:border" onSubmit={(e) => handleUpdate(e)}>
-                    <div>
-                        <label htmlFor="title">Titel:</label>
-                        <input type="text" id="title" defaultValue={event.title} required/>
-                    </div>
-                    <div>
-                        <label htmlFor="startDate">Startdatum:</label>
-                        <input type="datetime-local" id="startDate" defaultValue={formatDateForInput(event.startDate)} required/>
-                    </div>
-                    <div>
-                        <label htmlFor="endDate">Slutdatum:</label>
-                        <input type="datetime-local" id="endDate" defaultValue={formatDateForInput(event.endDate)} required/>
-                    </div>
-                    <div>
-                        <label htmlFor="description">Beskrivning:</label>
-                        <textarea id="description" defaultValue={event.description} required></textarea>
-                    </div>
-                    <button type="submit" className="bg-green-500! hover:bg-green-700! text-white font-bold py-2 px-4 rounded">Spara ändringar</button>
+        <div className="flex items-center justify-center">
+            <div className="bg-neutral-900 p-10 rounded-lg text-white w-[90%]">
+                <div className="flex items-center justify-between">
+                <h2>Uppdatera event</h2>
+                <X className="cursor-pointer" onClick={() => onClose()}/>
+              </div>
+              <form onSubmit={(e) => handleUpdate(e)} className="flex flex-col gap-8 my-4 *:flex *:flex-col [&>div]:text-start [&>div>input]:p-2 [&>div>input]:rounded-md [&>div>input]:border [&>div>textarea]:p-2 [&>div>textarea]:rounded-md [&>div>textarea]:border">
+                <div>
+                  <label htmlFor="title">Titel:</label>
+                  <input type="text" id="title" placeholder="Titel" required defaultValue={event.title} />
+                </div>
+                <div>
+                  <label htmlFor="description">Beskrivning:</label>
+                  <textarea id="description" placeholder="Beskrivning" required defaultValue={event.description}></textarea>
+                </div>
+                <div className="flex md:flex-row! [&>div]:flex [&>div]:flex-col [&>div]:justify-start [&>div]:items-start justify-evenly items-center [&>div]:gap-2 gap-4 md:gap-0">
+                  <div>
+                    <label htmlFor="startDate">Startdatum:</label>
+                    <input type="datetime-local" id="startDate" placeholder="Startdatum" required defaultValue={formatDateForInput(event.startDate)} />
+                  </div>
+                  <div>
+                    <label htmlFor="endDate">Slutdatum:</label>
+                    <input type="datetime-local" id="endDate" placeholder="Slutdatum" required defaultValue={formatDateForInput(event.endDate)} />
+                  </div>
+                </div>
+                <button type="submit" className="bg-green-500 rounded-[50%]">Uppdatera</button>
                 </form>
                 {error && <p className="text-red-500">{error}</p>}
                 <div className="grid grid-cols-2 gap-4">

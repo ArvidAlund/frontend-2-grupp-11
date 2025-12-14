@@ -93,13 +93,23 @@ const EventPlanner = () => {
         )}
         {createEventModalOpen && (
           <CreateEventModal
-            onClose={() => setCreateEventModalOpen(false)}
+            onClose={(updatedEvents) => {
+            setCreateEventModalOpen(false);
+            if (updatedEvents) {
+              setEvents(updatedEvents);
+            }
+          }}
           />
         )}
         {updateEvent && (
           <EditEvent
             event={updateEvent}
-            onClose={() => setUpdateEvent(null)}
+            onClose={(updatedEvents) => {
+            setUpdateEvent(null);
+            if (updatedEvents) {
+              setEvents(updatedEvents);
+            }
+          }}
           />
         )}
       </main>
