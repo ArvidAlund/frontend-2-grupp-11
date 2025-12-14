@@ -7,7 +7,6 @@ import EditEvent from "../components/events/editEvent";
 import { Plus } from "lucide-react";
 
 const EventPlanner = () => {
-  const [userId, setUserId] = useState(null);
   const [loading, setLoading] = useState(true);
   const [events, setEvents] = useState([]);
   const [createEventModalOpen, setCreateEventModalOpen] = useState(false);
@@ -18,11 +17,7 @@ const EventPlanner = () => {
     const fetchUser = async () => {
       try {
         const user = isUserLoggedIn();
-        if (user && user.id) {
-          setUserId(user.id);
-        } else {
-          setUserId(null);
-        }
+        
         let res
         if (!user || !user.id) {
           res = getGenericEvents();
@@ -32,7 +27,6 @@ const EventPlanner = () => {
         setEvents(res);
       } catch (error) {
         console.error("Error checking user status:", error);
-        setUserId(null);
       } finally {
         setLoading(false);
       }

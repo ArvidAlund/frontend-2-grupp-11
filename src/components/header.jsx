@@ -7,6 +7,7 @@ const Header = () => {
     const [userId, setUserId] = useState(null);
     const [user, setUser] = useState();
     const [menuOpen, setMenuOpen] = useState(false);
+    const [open, setOpen] = useState(false);
 
     useEffect(() => {
         const checkUserStatus = () => {
@@ -31,67 +32,39 @@ const Header = () => {
                 <Menu />
             </button>
 
-            <div className="flex items-center gap-2 col-start-2">
+            <Link to="/" className="flex items-center gap-2 col-start-2">
                 <CircleCheck />
                 <h4 className="text-lg font-semibold">ProTivity</h4>
-            </div>
+            </Link>
 
-            <nav className={`${menuOpen ? "absolute top-14 left-0 w-full bg-neutral-800 text-white flex flex-col items-start px-4 py-2 gap-2 md:hidden z-50" : "hidden"} md:flex! md:relative! md:top-0! gap-6 font-semibold text-lg md:gap-8 md:col-auto md:flex-row md:items-center md:justify-center bg-transparent!`}>
+            <nav className={`${menuOpen ? "absolute top-14 left-0 w-full bg-[#242424] text-white flex flex-col items-start px-4 py-2 gap-2 md:hidden z-50" : "hidden"} md:flex! md:relative! md:top-0! gap-6 font-semibold text-lg md:gap-8 md:col-auto md:flex-row md:items-center md:justify-center md:bg-transparent!`}>
                 <Link to="/todos">Att göra</Link>
                 <Link to="/habits">Vanor</Link>
                 <Link to="/event-planner">Event Planner</Link>
             </nav>
 
-            <div className="hidden md:flex items-center gap-4 min-w-20">
+            <div className="col-start-3 flex justify-end">
                 {userId ? (
-                <>
-                    <span>Hej: {user?.username || "Användare"}</span>
-                    <button
-                    onClick={() => {
-                    logOutUser();
-                    setUserId(null);
-                    window.location.reload();
-                    }}
-                    className="hover:underline"
-                    >
-                    Logga ut
-                    </button>
-                </>
-                ) : (
-                <Link to="/login">Logga in</Link>
-                )}
-            </div>
-
-            <div className="md:hidden col-span-3 flex justify-end">
-                {userId ? (
-                <CircleUser />
-                ) : null}
-            </div>
-
-            {/* {menuOpen && (
-                <div className="absolute top-14 left-0 w-full bg-neutral-800 text-white flex flex-col items-start px-4 py-2 gap-2 md:hidden z-50">
-                    <Link to="/todos" onClick={() => setMenuOpen(false)}>Att göra</Link>
-                    <Link to="/habits" onClick={() => setMenuOpen(false)}>Vanor</Link>
-                    <Link to="/event-planner" onClick={() => setMenuOpen(false)}>Event Planner</Link>
-                    {userId ? (
-                        <>
-                        <span>Hej: {user?.username || "Användare"}</span>
+                    <div className="flex gap-2 relative" onClick={() => setOpen(!open)}>
+                    <p className="w-20 truncate select-none cursor-pointer">{user?.username || "Användare"}</p>
+                    <CircleUser />
+                    {open && (
+                        <div className="absolute top-8 right-0 bg-neutral-800 p-2 rounded-md flex flex-col gap-2 transition duration-200 w-full items-center">
                         <button
-                        onClick={() => {
+                            className="font-normal text-sm text-red-500 p-0!"
+                            onClick={() => {
                             logOutUser();
-                            setUserId(null);
                             window.location.reload();
                             }}
-                        className="hover:underline"
                         >
-                        Logga ut
+                            Logga ut
                         </button>
-                        </>
-                    ) : (
-                        <Link to="/login" onClick={() => setMenuOpen(false)}>Logga in</Link>
+                        </div>
                     )}
-                </div>
-            )} */}
+                    </div>
+                ) : <Link to="/login" className=" text-white px-4 py-2 rounded-md transition">Logga in</Link>}
+            </div>
+
         </header>
     );
 };
