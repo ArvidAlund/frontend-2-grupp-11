@@ -4,6 +4,7 @@ import { getEventsUserID, getGenericEvents } from "../lib/events";
 import CreateEventModal from "../components/events/createEventsModal";
 import EventContainer from "../components/events/eventContainer";
 import EditEvent from "../components/events/editEvent";
+import { Plus } from "lucide-react";
 
 const EventPlanner = () => {
   const [userId, setUserId] = useState(null);
@@ -45,59 +46,56 @@ const EventPlanner = () => {
   }
 
   return (
-    <section className="text-center">
-      <h1 className="mb-10 text-center font-bold">Event Planner</h1>
-        <div>
-          <h2>{userId ? "Dina Events" : "Generella Events"}</h2>
-          <div className="flex justify-center gap-8 py-4">
-            <button onClick={() => setCreateEventModalOpen(true)}>Skapa event</button>
-            <select name="sort" id="sort" value={sortOption} onChange={(e) => setSortOption(e.target.value)} className="ml-4 *:bg-black">
+    <section className="grid md:grid-cols-[1fr_2fr] gap-20 mt-10">
+      <aside>
+        <div className="flex flex-col items-start gap-4 p-4">
+          <button
+            className="bg-[#004a75] text-white px-4 py-2 rounded-md hover:bg-blue-700 transition flex w-full items-center justify-center"
+            onClick={() => setCreateEventModalOpen(true)}
+          >
+            <Plus className="inline-block mr-2" />
+            <p>Skapa</p>
+          </button>
+          <div>
+            <label htmlFor="sort" className="block mb-2 text-white font-semibold">
+              Filtrera
+            </label>
+            <select
+              id="sort"
+              value={sortOption}
+              onChange={(e) => setSortOption(e.target.value)}
+              className="w-full rounded-md *:bg-black"
+            >
               <option value="coming">Kommande</option>
               <option value="past">Tidigare</option>
             </select>
           </div>
-          {events.length > 0 ? (
-            <div className="flex flex-col gap-10 max-w-[800px] mx-auto">
-              <h3 className="border-b-2 border-neutral-700">{sortOption === "coming" ? "Kommande Events" : "Tidigare Events"}</h3>
-              {sortOption && (
-              <ul>
-                {events.filter(event => {
-                  const now = new Date();
-                  const start = new Date(event.startDate);
-                  const end = new Date(event.endDate);
-
-                  if (sortOption === "coming") {
-                    return start >= now;
-                  } else if (sortOption === "past") {
-                    return end < now;
-                  }
-                  return false;
-                }).map(event => (
-                  <EventContainer key={event.id} event={event} onClick={() => setUpdateEvent(event)} type={sortOption} />
-                ))}
-              </ul>
-              )}
-            </div>
-          ) : (
-            <p>Inga events hittade</p>
-          )}
         </div>
-        {createEventModalOpen && (
-          <CreateEventModal onClose={(updatedEvents) => {
-            setCreateEventModalOpen(false);
-            if (updatedEvents) {
-              setEvents(updatedEvents);
-            }
-          }} userId={userId} />
+      </aside>
+      <main className="flex flex-col justify-center items-center md:block">
+        {events.length === 0 ? (
+          <div className="flex flex-col items-center justify-center mt-20">
+            <h2 className="text-2xl font-semibold mb-4 text-white">Inga evenemang tillgängliga</h2>
+          </div>
+        ) : (
+          <>
+            {events.filter(event => {
+              const now = new Date();
+              const start = new Date(event.startDate);
+              const end = new Date(event.endDate);
+
+              if (sortOption === "coming") {
+                return start >= now;
+              } else if (sortOption === "past") {
+                return end < now;
+              }
+              return false;
+            }).map(event => (
+              <EventContainer key={event.id} event={event} onClick={() => setUpdateEvent(event)} type={sortOption} />
+            ))}
+          </>
         )}
-        {updateEvent !== null && (
-          <EditEvent event={updateEvent} onClose={(updatedEvents) => {
-            setUpdateEvent(null);
-            if (updatedEvents) {
-              setEvents(updatedEvents);
-            }
-          }} />
-        )}
+      </main>
     </section>
   );
 };
