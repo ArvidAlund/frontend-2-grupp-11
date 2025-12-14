@@ -12,7 +12,7 @@ const EventPlanner = () => {
   const [events, setEvents] = useState([]);
   const [createEventModalOpen, setCreateEventModalOpen] = useState(false);
   const [sortOption, setSortOption] = useState("coming");
-  const [updateEvent, setUpdateEvent] = useState(null);
+  const [updateEvent, setUpdateEvent] = useState(false);
 
   useEffect(() => {
     const fetchUser = async () => {
@@ -73,11 +73,7 @@ const EventPlanner = () => {
         </div>
       </aside>
       <main className="flex flex-col justify-center items-center md:block">
-        {events.length === 0 ? (
-          <div className="flex flex-col items-center justify-center mt-20">
-            <h2 className="text-2xl font-semibold mb-4 text-white">Inga evenemang tillgängliga</h2>
-          </div>
-        ) : (
+        {!createEventModalOpen && !updateEvent && events.length !== 0 && (
           <>
             {events.filter(event => {
               const now = new Date();
@@ -94,6 +90,17 @@ const EventPlanner = () => {
               <EventContainer key={event.id} event={event} onClick={() => setUpdateEvent(event)} type={sortOption} />
             ))}
           </>
+        )}
+        {createEventModalOpen && (
+          <CreateEventModal
+            onClose={() => setCreateEventModalOpen(false)}
+          />
+        )}
+        {updateEvent && (
+          <EditEvent
+            event={updateEvent}
+            onClose={() => setUpdateEvent(null)}
+          />
         )}
       </main>
     </section>
