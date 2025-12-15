@@ -1,22 +1,22 @@
 import { Link } from "react-router-dom";
-import { loginUser } from "../lib/auth";
 import { useState } from "react";
+import { createUser } from "../../lib/auth";
 
-const Login = () => {
+const Register = () => {
   const [error, setError] = useState(null);
   const [loading, setLoading] = useState(false);
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
 
-  const tryLogin = async (event) => {
+  const trySignUp = (event) => {
     event.preventDefault();
     setLoading(true);
     setError(null);
 
-    const result = loginUser({ username, password });
+    const result = createUser(username, password);
 
-    if (result.loggedIn) {
-      window.location.href = "/";
+    if (result.success) {
+        window.location.href = "/";
     } else {
       setError(result.message);
     }
@@ -24,12 +24,9 @@ const Login = () => {
   };
 
   return (
-    <div className="flex flex-1 items-center justify-center">
-      <div className="w-full max-w-md bg-white rounded-lg shadow-lg p-8">
-        <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">
-          Logga in
-        </h2>
-        <form className="space-y-5" onSubmit={tryLogin}>
+
+      <div className="w-full">
+        <form className="space-y-5 [&>div>input]:text-neutral-400" onSubmit={trySignUp}>
           <div>
             <label
               htmlFor="username"
@@ -43,10 +40,10 @@ const Login = () => {
               name="username"
               value={username}
               onChange={(e) => setUsername(e.target.value)}
-              className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-black ${
+              className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:border-transparent focus:ring-green-400 focus:outline-none ${
                 error ? "border-red-500" : "border-gray-300"
               }`}
-              placeholder="Skriv ditt användarnamn"
+              placeholder="Välj ditt användarnamn"
               required
             />
           </div>
@@ -63,31 +60,24 @@ const Login = () => {
               name="password"
               value={password}
               onChange={(e) => setPassword(e.target.value)}
-              className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:ring-blue-500 focus:outline-none text-black ${
+              className={`w-full px-4 py-2 border rounded-md focus:ring-2 focus:border-transparent focus:ring-green-400 focus:outline-none ${
                 error ? "border-red-500" : "border-gray-300"
               }`}
-              placeholder="Skriv ditt lösenord"
+              placeholder="Välj ditt lösenord"
               required
             />
           </div>
           <button
             type="submit"
             disabled={loading}
-            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="w-full bg-blue-600 text-white py-2 px-4 rounded-md hover:bg-blue-700 transition-colors disabled:opacity-50 disabled:cursor-not-allowed mt-10"
           >
-            {loading ? "Loggar in..." : "Logga in"}
+            {loading ? "Skapar konto..." : "Skapa konto"}
           </button>
         </form>
-        <p className="text-sm text-gray-600 text-center mt-4">
-          Har du inget konto?{" "}
-          <Link to="/signup" className="text-blue-600 hover:underline">
-            Skapa konto
-          </Link>
-        </p>
         {error && <p className="text-red-600 text-center mt-4">{error}</p>}
       </div>
-    </div>
   );
 };
 
-export default Login;
+export default Register;
