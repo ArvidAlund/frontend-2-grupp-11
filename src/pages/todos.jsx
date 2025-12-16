@@ -146,7 +146,7 @@ export default function Todos() {
       </aside>
 
       {/* MAIN */}
-      <main className="flex flex-col gap-4">
+      <main className="flex flex-col gap-4 justify-center items-center md:block">
         {!openTodoModal && updatingTodo === null && filteredTodos.length > 0 && (
           filteredTodos.map((todo) => (
             <TaskContainer
