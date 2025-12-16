@@ -1,7 +1,8 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Plus } from "lucide-react";
 import CreateTodoModal from "../components/todo/createTodoModal";
 import TaskContainer from "../components/todo/taskContainer";
+import EditTodoModal from "../components/todo/editTodoModal";
 
 // exempeldata att använda som startlista
 const initialTodos = [
@@ -12,7 +13,7 @@ const initialTodos = [
     category: "hälsa",
     time: 30,
     deadline: "2025-12-20",
-    done: false,
+    done: true,
   },
   {
     id: 2,
@@ -45,41 +46,25 @@ const initialTodos = [
 
 
 export default function Todos() {
-  const [todos, setTodos] = useState(initialTodos);
+  const [todos, setTodos] = useState([]);
   const [filterStatus, setFilterStatus] = useState("alla");
   const [filterCategory, setFilterCategory] = useState("alla");
   const [sortBy, setSortBy] = useState("");
   const [openTodoModal, setOpenTodoModal] = useState(false);
-  const [updatingTodoId, setUpdatingTodoId] = useState(false);
+  const [updatingTodo, setUpdatingTodo] = useState(null);
 
-  // -----------------------------
-  // UPDATE / DELETE / TOGGLE
-  // -----------------------------
-  const toggleDone = (id) => {
-    setTodos(todos.map((t) => (t.id === id ? { ...t, done: !t.done } : t)));
-  };
-
-  const deleteTodo = (id) => {
-    setTodos(todos.filter((t) => t.id !== id));
-  };
-
-  const editTodo = (id) => {
-    const todo = todos.find((t) => t.id === id);
-    if (!todo) return;
-    const newTitle = prompt("Ny titel:", todo.title);
-    const newDescription = prompt("Ny beskrivning:", todo.description);
-    setTodos(
-      todos.map((t) =>
-        t.id === id
-          ? {
-              ...t,
-              title: newTitle || t.title,
-              description: newDescription || t.description,
-            }
-          : t
-      )
-    );
-  };
+  useEffect(() => {
+    const getTodos = () => {
+      const storedTodos = localStorage.getItem("todos");
+      if (storedTodos) {
+        setTodos(JSON.parse(storedTodos));
+      } else {
+        localStorage.setItem("todos", JSON.stringify(initialTodos));
+        setTodos(initialTodos);
+      }
+    };
+    getTodos();
+  }, []);
 
   // -----------------------------
   // FILTER & SORT
@@ -162,13 +147,12 @@ export default function Todos() {
 
       {/* MAIN */}
       <main className="flex flex-col gap-4">
-        {!openTodoModal && !updatingTodoId && filteredTodos.length > 0 && (
+        {!openTodoModal && updatingTodo === null && filteredTodos.length > 0 && (
           filteredTodos.map((todo) => (
             <TaskContainer
               key={todo.id}
               task={todo}
-              onClick={() => toggleDone(todo.id)}
-              type={todo.done ? "past" : "coming"}
+              onClick={() => setUpdatingTodo(todo)}
             />
           ))
         )}
@@ -179,6 +163,17 @@ export default function Todos() {
               if (updatedTodos) {
                 setTodos(updatedTodos);
               }
+            }}
+          />
+        )}
+        {updatingTodo !== null && (
+          <EditTodoModal
+            todo={updatingTodo}
+            onClose={(updatedTodos) => {
+              setUpdatingTodo(null);
+              if (updatedTodos) {
+                setTodos(updatedTodos);
+                } 
             }}
           />
         )}
