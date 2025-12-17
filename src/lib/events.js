@@ -82,4 +82,14 @@ const updateEvent = (updatedEvent) => {
     return { success: true, events };
 };
 
-export { getEventsUserID, getGenericEvents, createEvent, deleteEvent, updateEvent };
+const getEventsUpcoming = (userId) => {
+    const now = new Date();
+    if (userId === null) {
+        const events = getGenericEvents();
+        return {success: true, events: events.sort((a, b) => new Date(a.startDate) - new Date(b.startDate)).filter(event => new Date(event.startDate) >= now).splice(0, 3)};
+    }
+    const events = getEventsUserID(userId);
+    return {success: true, events: events.sort((a, b) => new Date(a.startDate) - new Date(b.startDate)).filter(event => new Date(event.startDate) >= now).splice(0, 3)};
+}
+
+export { getEventsUserID, getGenericEvents, createEvent, deleteEvent, updateEvent, getEventsUpcoming };

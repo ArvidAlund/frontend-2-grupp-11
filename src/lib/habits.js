@@ -73,4 +73,14 @@ const markHabitAsCompleted = (userId, id) => {
     return updateHabit(userId, id, { completed: true });
 }
 
-export { getHabits, createHabit, updateHabit, deleteHabit, markHabitAsCompleted, getHabistsByUser, getGenericHabits };
+const getHabitsSortedByRepetitions = (userId) => {
+    if (userId === null) {
+        const habits = getGenericHabits();
+        return {success: true, habits: habits.sort((a, b) => b.repetitions - a.repetitions).slice(0, 3)};
+    }
+    
+    const habits = getHabistsByUser(userId);
+    return {success: true, habits: habits.sort((a, b) => b.repetitions - a.repetitions).slice(0, 3)};
+}
+
+export { getHabits, createHabit, updateHabit, deleteHabit, markHabitAsCompleted, getHabistsByUser, getGenericHabits, getHabitsSortedByRepetitions };
