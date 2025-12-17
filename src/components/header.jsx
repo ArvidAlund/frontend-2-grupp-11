@@ -62,7 +62,7 @@ const Header = () => {
                         </div>
                     )}
                     </div>
-                ) : <Link to="/login" className=" text-white px-4 py-2 rounded-md transition">Logga in</Link>}
+                ) : <Link to="/" className=" text-white px-4 py-2 rounded-md transition">Logga in</Link>}
             </div>
 
         </header>
