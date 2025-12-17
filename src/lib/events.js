@@ -1,7 +1,8 @@
 const getEventsUserID = (userId) => {
     let events = localStorage.getItem('events');
     if (!events) {
-        return [];
+        const res = setupInitialEvents();
+        return res.filter(event => event.userId === userId);
     } else {
         events = JSON.parse(events);
         return events.filter(event => event.userId === userId);
@@ -11,12 +12,25 @@ const getEventsUserID = (userId) => {
 const getGenericEvents = () => {
     let events = localStorage.getItem('events');
     if (!events) {
-        return [];
+        const res = setupInitialEvents();
+        return res.filter(event => !event.userId);
     } else {
         events = JSON.parse(events);
         return events.filter(event => !event.userId);
     }
 };
+
+const setupInitialEvents = () => {
+    const initialEvents = [
+        { id: 1, userId: null, title: 'Team Meeting', startDate: '2026-07-01T10:00:00', endDate: '2026-07-01T11:00:00', description: 'Monthly team sync-up meeting.' },
+        { id: 2, userId: null, title: 'Project Deadline', startDate: '2026-07-15T23:59:00', endDate: '2026-07-15T23:59:00', description: 'Final submission of the project deliverables.' },
+        { id: 3, userId: 1, title: 'Doctor Appointment', startDate: '2026-07-05T14:30:00', endDate: '2026-07-05T15:00:00', description: 'Routine health check-up.' },
+        { id: 4, userId: 1, title: 'Birthday Party', startDate: '2026-07-20T19:00:00', endDate: '2026-07-20T22:00:00', description: 'Celebrating at home with friends and family.' },
+        { id: 5, userId: null, title: 'Webinar on Productivity', startDate: '2026-07-10T16:00:00', endDate: '2026-07-10T17:30:00', description: 'Join us for a webinar on improving productivity.' },
+    ];
+    localStorage.setItem('events', JSON.stringify(initialEvents));
+    return initialEvents;
+}
 
 const createEvent = (userId, title, startDate, endDate, description) => {
     let events = localStorage.getItem('events');

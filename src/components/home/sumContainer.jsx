@@ -14,14 +14,14 @@ const SumContainer = ({ titel, link, list, type }) => {
           list.map((item, index) => (
             <li
               key={index}
-              className="border-b border-neutral-700 py-2 flex justify-between items-center gap-2"
+              className="border-b border-neutral-700 py-2 grid grid-cols-2 items-center gap-2"
             >
-              <p className="turnicate">{item.title}</p>
+              <p className="truncate">{item.title}</p>
               {type && (
-                <p className="text-sm text-neutral-400">
+                <p className="text-sm text-neutral-400 text-end">
                   {type === "habit"
                     ? `repetitioner: ${item.repetitions}`
-                    : `datum: ${new Date(item.startDate).toLocaleDateString("sv-SE")}`}
+                    : `datum: ${new Date(item.startDate).toLocaleDateString("sv-SE", { year: '2-digit', month: 'short', day: 'numeric' })}`}
                 </p>
               )}
             </li>
