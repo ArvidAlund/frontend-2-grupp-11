@@ -5,14 +5,18 @@ const getHabits = () => {
         localStorage.setItem('habits', JSON.stringify(initialHabits));
         return initialHabits;
     }
-    const parsedHabits = JSON.parse(habits);
-    const filteredHabits = parsedHabits.filter(habit => habit.userId === null);
-    return filteredHabits ? filteredHabits : [];
+    
+    return habits ? JSON.parse(habits) : [];
 }
 
 const getHabistsByUser = (userId) => {
     const habits = getHabits();
     return habits.filter(habit => habit.userId === userId);
+}
+
+const getGenericHabits = () => {
+    const habits = getHabits();
+    return habits.filter(habit => habit.userId === null);
 }
 
 const createInitialHabits = () => {
@@ -24,35 +28,39 @@ const createInitialHabits = () => {
         { id: 5, userId: null, title: 'Sleep Early', description: 'Go to bed before 11 PM', repetitions: 6, priority: 'high', completed: false },
         { id: 6, userId: null, title: 'Healthy Eating', description: 'Eat at least 5 servings of fruits and vegetables', repetitions: 5, priority: 'high', completed: false },
         { id: 7, userId: null, title: 'Learn Something New', description: 'Spend 15 minutes learning a new skill or topic', repetitions: 4, priority: 'low', completed: false },
+        { id: 8, userId: 1, title: 'Gratitude Journal', description: 'Write down 3 things you are grateful for', repetitions: 7, priority: 'low', completed: false },
+        { id: 9, userId: 1, title: 'Walk the Dog', description: 'Take your dog for a walk', repetitions: 5, priority: 'medium', completed: false },
     ];
     localStorage.setItem('habits', JSON.stringify(initialHabits));
     return initialHabits;
 }
 
-const createHabit = (userId, title, repetitions, priority) => {
+const createHabit = ({userId, title, description, repetitions, priority}) => {
     const habits = getHabits();
     const newHabit = {
-        id: Date.now(),
+        id: habits.length > 0 ? Math.max(...habits.map(habit => habit.id)) + 1 : 1,
         userId,
         title,
+        description,
         repetitions,
         priority,
         completed: false,
     };
     habits.push(newHabit);
+    console.log("Creating habit:", newHabit);
     localStorage.setItem('habits', JSON.stringify(habits));
-    return newHabit;
+    return { success: true, habit: newHabit  };
 }
 
 const updateHabit = (userId, id, updatedFields) => {
     const habits = getHabits();
     const habitIndex = habits.findIndex(habit => habit.id === id && habit.userId === userId);
-    if (habitIndex !== -1) {
+    if (habitIndex) {
         habits[habitIndex] = { ...habits[habitIndex], ...updatedFields };
         localStorage.setItem('habits', JSON.stringify(habits));
-        return habits[habitIndex];
+        return { success: true, habit: habits[habitIndex] };
     }
-    return null;
+    return { success: false, message: 'Habit not found' };
 }
 
 const deleteHabit = (userId, id) => {
@@ -66,4 +74,4 @@ const markHabitAsCompleted = (userId, id) => {
     return updateHabit(userId, id, { completed: true });
 }
 
-export { getHabits, createHabit, updateHabit, deleteHabit, markHabitAsCompleted, getHabistsByUser };
+export { getHabits, createHabit, updateHabit, deleteHabit, markHabitAsCompleted, getHabistsByUser, getGenericHabits };

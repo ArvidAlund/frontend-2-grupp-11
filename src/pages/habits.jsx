@@ -1,8 +1,10 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { isUserLoggedIn } from "../lib/auth";
-import { getHabistsByUser, getHabits } from "../lib/habits";
+import { getGenericHabits, getHabistsByUser } from "../lib/habits";
 import { Plus } from "lucide-react";
 import HabitContainer from "../components/habits/habitContainer";
+import EditHabit from "../components/habits/editHabit";
+import CreateHabitModal from "../components/habits/createHabitModal";
 
 const priorityOrder = {
   high: 1,
@@ -24,16 +26,33 @@ const Habits = () => {
                 const habits = getHabistsByUser(user.id);
                 setHabits(habits);
             } else {
-                const habits = getHabits();
+                const habits = getGenericHabits();
                 setHabits(habits);
             }
         };
         getHabitsFromStorage();
     }, []);
 
-    const sortedHabits = [...habits].sort((a, b) => {
-        return priorityOrder[a.priority] - priorityOrder[b.priority];
-    });
+    const sortedHabits = useMemo(() => {
+        if (!Array.isArray(habits)) return [];
+        return [...habits].sort((a, b) => {
+            const diff = priorityOrder[a.priority] - priorityOrder[b.priority];
+            if (diff !== 0) return diff;
+            return a.id - b.id;
+        });
+    }, [habits]);
+
+    const updateHabits = () => {
+        if (userId) {
+            const updatedHabits = getHabistsByUser(userId);
+            setHabits(updatedHabits);
+        } else {
+            const updatedHabits = getGenericHabits();
+            setHabits(updatedHabits);
+        }
+    }
+
+
 
     return (
     <section className="grid md:grid-cols-[1fr_2fr] gap-20 mt-10 h-full">
@@ -61,25 +80,24 @@ const Habits = () => {
             />
           ))
         )}
+
         {openHabitModal && (
           <CreateHabitModal
-            onClose={(updatedHabits) => {
+            userId={userId}
+            onClose={() => {
               setOpenHabitModal(false);
-              if (updatedHabits) {
-                setHabits(updatedHabits);
-              }
-            }}
+              updateHabits();
+            }}  
           />
         )}
+
         {updatingHabit !== null && (
-          <EditHabitModal
+          <EditHabit
             habit={updatingHabit}
-            onClose={(updatedHabits) => {
+            onClose={() => {
               setUpdatingHabit(null);
-              if (updatedHabits) {
-                setHabits(updatedHabits);
-                } 
-            }}
+              updateHabits();
+            }}  
           />
         )}
       </main>
