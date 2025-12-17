@@ -17,6 +17,8 @@ const Habits = () => {
     const [openHabitModal, setOpenHabitModal] = useState(false);
     const [updatingHabit, setUpdatingHabit] = useState(null);
     const [userId, setUserId] = useState(); 
+    const [sortBy, setSortBy] = useState("priority");
+    const [filterBy, setFilterBy] = useState("all");
 
     useEffect(() => {
         const getHabitsFromStorage = () => {
@@ -36,11 +38,19 @@ const Habits = () => {
     const sortedHabits = useMemo(() => {
         if (!Array.isArray(habits)) return [];
         return [...habits].sort((a, b) => {
+            if (sortBy === "repetitions") {
+            const diff = b.repetitions - a.repetitions;
+            if (diff !== 0) return diff;
+            return a.id - b.id;
+            } else if (sortBy === "priority") {
             const diff = priorityOrder[a.priority] - priorityOrder[b.priority];
             if (diff !== 0) return diff;
             return a.id - b.id;
+            }
+            return 0;
         });
-    }, [habits]);
+    }, [habits, sortBy]);
+
 
     const updateHabits = () => {
         if (userId) {
@@ -66,13 +76,39 @@ const Habits = () => {
             <Plus className="inline-block mr-2" />
             <p>Skapa</p>
           </button>
+
+          <div className="flex items-center gap-10">
+            <div>
+                <h4 className="text-2xl font-semibold mb-2">Sortera</h4>
+                <div className="flex flex-col gap-2">
+                <select name="" id="" value={sortBy} onChange={(e) => setSortBy(e.target.value)} className="*:bg-black p-2 w-full">
+                    <option value="priority">Prioritet</option>
+                    <option value="repetitions">Repetitioner</option>
+                </select>
+                </div>
+            </div>
+            <div>
+                <h4 className="text-2xl font-semibold mb-2">Filtrera</h4>
+                <div className="flex flex-col gap-2">
+                    <select name="" id="" className="*:bg-black p-2 w-full" value={filterBy} onChange={(e) => setFilterBy(e.target.value)}>
+                        <option value="all">Alla</option>
+                        <option value="high">Hög prioritet</option>
+                        <option value="medium">Medium prioritet</option>
+                        <option value="low">Låg prioritet</option>
+                    </select>
+                </div>
+            </div>
+          </div>
         </div>
       </aside>
 
       {/* MAIN */}
       <main className="flex flex-col gap-4 justify-center items-center md:block">
         {!openHabitModal && updatingHabit === null && sortedHabits.length > 0 && (
-          sortedHabits.map((habit) => (
+          sortedHabits.filter(habit => {
+            if (filterBy === "all") return true;
+            return habit.priority === filterBy;
+          }).map((habit) => (
             <HabitContainer
               key={habit.id}
               habit={habit}
