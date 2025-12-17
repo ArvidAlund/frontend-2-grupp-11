@@ -47,7 +47,6 @@ const createHabit = ({userId, title, description, repetitions, priority}) => {
         completed: false,
     };
     habits.push(newHabit);
-    console.log("Creating habit:", newHabit);
     localStorage.setItem('habits', JSON.stringify(habits));
     return { success: true, habit: newHabit  };
 }
@@ -67,7 +66,7 @@ const deleteHabit = (userId, id) => {
     const habits = getHabits();
     const updatedHabits = habits.filter(habit => !(habit.id === id && habit.userId === userId));
     localStorage.setItem('habits', JSON.stringify(updatedHabits));
-    return updatedHabits;
+    return { success: true };
 }
 
 const markHabitAsCompleted = (userId, id) => {

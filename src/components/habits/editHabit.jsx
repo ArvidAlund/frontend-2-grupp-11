@@ -1,16 +1,15 @@
 import { useState } from "react";
-import { deleteEvent } from "../../lib/events";
 import { X } from "lucide-react";
-import { updateHabit } from "../../lib/habits";
+import { updateHabit, deleteHabit } from "../../lib/habits";
 
 const EditHabit = ({ habit, onClose }) => {
   const [deleteConfirm, setDeleteConfirm] = useState(false);
   const [error, setError] = useState(null);
 
   const handleDelete = () => {
-    const res = deleteEvent(habit.id, habit.userId);
+    const res = deleteHabit(habit.userId, habit.id);
     if (res.success) {
-      onClose(res.events);
+      onClose();
     } else {
       console.error("Failed to delete event:", res.message);
     }
