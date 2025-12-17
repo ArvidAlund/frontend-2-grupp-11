@@ -5,7 +5,9 @@ const getHabits = () => {
         localStorage.setItem('habits', JSON.stringify(initialHabits));
         return initialHabits;
     }
-    return habits ? JSON.parse(habits) : [];
+    const parsedHabits = JSON.parse(habits);
+    const filteredHabits = parsedHabits.filter(habit => habit.userId === null);
+    return filteredHabits ? filteredHabits : [];
 }
 
 const getHabistsByUser = (userId) => {
@@ -15,9 +17,13 @@ const getHabistsByUser = (userId) => {
 
 const createInitialHabits = () => {
     const initialHabits = [
-        { id: 1, userId: null, title: 'Drink Water', repetitions: 8, priority: 'high', completed: false },
-        { id: 2, userId: null, title: 'Exercise', repetitions: 5, priority: 'medium', completed: false },
-        { id: 3, userId: null, title: 'Read a Book', repetitions: 3, priority: 'low', completed: false },
+        { id: 1, userId: null, title: 'Drink Water', description: 'Drink at least 8 glasses of water daily', repetitions: 8, priority: 'high', completed: false },
+        { id: 2, userId: null, title: 'Exercise', description: 'Engage in physical activity for at least 30 minutes', repetitions: 5, priority: 'medium', completed: false },
+        { id: 3, userId: null, title: 'Read a Book', description: 'Read for at least 20 minutes', repetitions: 3, priority: 'low', completed: false },
+        { id: 4, userId: null, title: 'Meditate', description: 'Practice mindfulness meditation for 10 minutes', repetitions: 7, priority: 'medium', completed: false },
+        { id: 5, userId: null, title: 'Sleep Early', description: 'Go to bed before 11 PM', repetitions: 6, priority: 'high', completed: false },
+        { id: 6, userId: null, title: 'Healthy Eating', description: 'Eat at least 5 servings of fruits and vegetables', repetitions: 5, priority: 'high', completed: false },
+        { id: 7, userId: null, title: 'Learn Something New', description: 'Spend 15 minutes learning a new skill or topic', repetitions: 4, priority: 'low', completed: false },
     ];
     localStorage.setItem('habits', JSON.stringify(initialHabits));
     return initialHabits;
