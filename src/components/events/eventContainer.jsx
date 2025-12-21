@@ -2,6 +2,9 @@ import { Check } from "lucide-react";
 
 const EventContainer = ({ event, onClick, type }) => {
 
+  const startDateOnly = event.startDate.split("T")[0];
+  const endDateOnly = event.endDate.split("T")[0];
+
   return (
     <div
       className={`rounded-xl shadow-md p-6 mb-4 transition text-white select-none cursor-pointer
@@ -15,8 +18,15 @@ const EventContainer = ({ event, onClick, type }) => {
       </div>
 
       <div className="text-neutral-500 flex flex-col justify-between items-end gap-2">
-        <p className="font-semibold">Datum: {new Date(event.startDate).toLocaleDateString("sv-SE", { year: 'numeric', month: 'short', day: 'numeric' })} - <br /> {new Date(event.endDate).toLocaleDateString("sv-SE", { year: 'numeric', month: 'short', day: 'numeric' })}</p>
-        <p className="font-semibold">Tid: {new Date(event.startDate).toLocaleTimeString("sv-SE", { hour: '2-digit', minute: '2-digit' })} - {new Date(event.endDate).toLocaleTimeString("sv-SE", { hour: '2-digit', minute: '2-digit' })}</p>
+        
+        <p className="font-semibold text-end">
+          Datum: {
+            startDateOnly === endDateOnly
+              ? new Date(event.startDate).toLocaleDateString("sv-SE", { year: 'numeric', month: 'short', day: 'numeric' })
+              : `${new Date(event.startDate).toLocaleDateString("sv-SE", { year: 'numeric', month: 'short', day: 'numeric' })} - ${new Date(event.endDate).toLocaleDateString("sv-SE", { year: 'numeric', month: 'short', day: 'numeric' })}`
+          }
+        </p>
+        <p className="font-semibold text-end">Tid: {new Date(event.startDate).toLocaleTimeString("sv-SE", { hour: '2-digit', minute: '2-digit' })} - {new Date(event.endDate).toLocaleTimeString("sv-SE", { hour: '2-digit', minute: '2-digit' })}</p>
 
         <div className="flex items-center text-white gap-2 mt-4">
           <p>Status:</p>
