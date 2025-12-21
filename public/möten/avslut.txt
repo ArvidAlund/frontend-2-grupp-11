@@ -1,0 +1,17 @@
+Deltagare:
+
+Arvid
+
+Filippa
+
+Utmaningar vi stötte på
+Att koppla samman och integrera kod på ett smidigt sätt var ibland svårt.
+
+Kommunikation var en återkommande utmaning och något vi kan förbättra framåt.
+
+Lärdomar att ta med sig
+Fortsätta prioritera tydlig struktur i git‑flödet.
+
+Vara mer aktiva i att kommunicera och synka under arbetets gång.
+
+Säkerställa att kodgranskning och testning sker kontinuerligt.

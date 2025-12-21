@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { deleteEvent, updateEvent } from "../../lib/events";
+import { deleteEvent, getEventsUserID, updateEvent } from "../../lib/events";
 import { X } from "lucide-react";
 
 const formatDateForInput = (date) => {
@@ -15,7 +15,9 @@ const EditEvent = ({event, onClose}) => {
     const handleDelete = () => {
         const res = deleteEvent(event.id, event.userId);
         if (res.success){
-            onClose(res.events);
+            const user = event.userId;
+            const updatedEvents = getEventsUserID(user);
+            onClose(updatedEvents);
         } else {
             console.error("Failed to delete event:", res.message);
         }

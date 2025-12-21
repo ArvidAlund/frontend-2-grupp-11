@@ -16,7 +16,7 @@ const Habits = () => {
     const [habits, setHabits] = useState([]);
     const [openHabitModal, setOpenHabitModal] = useState(false);
     const [updatingHabit, setUpdatingHabit] = useState(null);
-    const [userId, setUserId] = useState(); 
+    const [userId, setUserId] = useState(null); 
     const [sortBy, setSortBy] = useState("priority");
     const [filterBy, setFilterBy] = useState("all");
 
