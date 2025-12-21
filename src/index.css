@@ -78,12 +78,132 @@ button {
 @media (prefers-color-scheme: light) {
   :root {
     color: #213547;
-    background-color: #ffffff;
+    background-color: #1b1b1b;
   }
   a:hover {
     color: #747bff;
   }
   button {
-    background-color: #f9f9f9;
+    background-color: #004a76;
   }
+}
+
+/* Filippa */
+/* Bakgrund och grund */
+html,
+body {
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: #1b1b1b;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+/* Wrapper */
+.todos-page {
+  display: flex;
+  min-height: 100%;
+  gap: 20px;
+  padding: 20px;
+}
+
+/* SIDOPANEL */
+.sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  min-width: 200px;
+}
+
+/* Filter och sort */
+.filter-section,
+.sort-section {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+select {
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  color: rgb(255, 255, 255); /* dropdowntext */
+}
+
+/* HUVUDINNEHÅLL */
+.main-content {
+  flex: 1;
+}
+
+/* Formulär */
+.todo-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.todo-form input {
+  padding: 8px;
+  border-radius: 5px;
+  border: none;
+  color: white;
+}
+
+.todo-form button {
+  background-color: #004a76;
+  border: none;
+  padding: 10px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+  font-weight: bold;
+}
+
+.todo-form button:hover {
+  background-color: #555;
+}
+
+/* TODO-LISTA */
+.todo-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+/* Todo-kort */
+.todo-card {
+  border: none;
+  border-radius: 8px;
+  padding: 10px;
+  background-color: #132936;
+}
+
+/* Hover state - border dyker upp */
+.todo-card:hover {
+  border: 1px solid #00765a;
+}
+
+.todo-card.active {
+  background-color: #333;
+}
+
+/* Actions */
+.todo-actions {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.todo-actions button {
+  background-color: #333;
+  border: none;
+  padding: 5px 10px;
+  color: white;
+  cursor: pointer;
+  border-radius: 5px;
+}
+
+.todo-actions button:hover {
+  background-color: #555;
 }
