@@ -11,12 +11,14 @@ const EventPlanner = () => {
   const [events, setEvents] = useState([]);
   const [createEventModalOpen, setCreateEventModalOpen] = useState(false);
   const [sortOption, setSortOption] = useState("coming");
-  const [updateEvent, setUpdateEvent] = useState(false);
+  const [updateEvent, setUpdateEvent] = useState(null);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
     const fetchUser = async () => {
       try {
         const user = isUserLoggedIn();
+        setUser(user.valid ? { id: user.id } : null);
         
         let res
         if (!user || !user.id) {
@@ -67,7 +69,7 @@ const EventPlanner = () => {
         </div>
       </aside>
       <main className="flex flex-col justify-center items-center md:block">
-        {!createEventModalOpen && !updateEvent && events.length !== 0 && (
+        {!createEventModalOpen && updateEvent === null && events.length !== 0 && (
           <>
             {events.filter(event => {
               const now = new Date();
@@ -87,6 +89,7 @@ const EventPlanner = () => {
         )}
         {createEventModalOpen && (
           <CreateEventModal
+            userId={user ? user.id : null}
             onClose={(updatedEvents) => {
             setCreateEventModalOpen(false);
             if (updatedEvents) {
