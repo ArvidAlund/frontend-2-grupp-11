@@ -73,6 +73,7 @@ button {
   font-family: inherit;
   cursor: pointer;
   transition: border-color 0.25s;
+  background-color: #004a76;
 }
 
 @media (prefers-color-scheme: light) {
@@ -206,4 +207,45 @@ select {
 
 .todo-actions button:hover {
   background-color: #555;
+}
+
+/* Tablet & mobil */
+@media (max-width: 768px) {
+  .todos-page {
+    flex-direction: column;
+    padding: 10px;
+  }
+
+  .sidebar {
+    flex-direction: row;
+    flex-wrap: wrap;
+    gap: 10px;
+    min-width: unset;
+  }
+
+  .filter-section,
+  .sort-section {
+    flex: 1;
+    min-width: 150px;
+  }
+
+  .todo-card {
+    padding: 12px;
+  }
+}
+
+/* Mobil */
+@media (max-width: 480px) {
+  .sidebar {
+    flex-direction: column;
+  }
+
+  .todo-actions {
+    justify-content: flex-end;
+  }
+
+  .todo-form input,
+  select {
+    width: 100%;
+  }
 }

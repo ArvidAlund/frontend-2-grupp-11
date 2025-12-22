@@ -1,28 +1,33 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState } from "react";
 import "../index.css";
+import EditTodos from "../components/todos/editTodos";
 
 export default function Todos() {
-  // ================== STATE ==================
-  const [todos, setTodos] = useState(() => {
-    const savedTodos = localStorage.getItem("todos");
-    return savedTodos ? JSON.parse(savedTodos) : [];
-  });
+  const [todos, setTodos] = useState([]);
+  const [editingTodo, setEditingTodo] = useState(null);
 
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [category, setCategory] = useState("hälsa");
   const [time, setTime] = useState("");
   const [deadline, setDeadline] = useState("");
+
   const [filterCategory, setFilterCategory] = useState("alla");
   const [sortBy, setSortBy] = useState("");
+
   const [showForm, setShowForm] = useState(false);
 
-  // ================== LOCAL STORAGE ==================
+  /* ---------- LOCAL STORAGE ---------- */
+  useEffect(() => {
+    const savedTodos = JSON.parse(localStorage.getItem("todos"));
+    if (savedTodos) setTodos(savedTodos);
+  }, []);
+
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
   }, [todos]);
 
-  // ================== FUNCTIONS ==================
+  /* ---------- CRUD ---------- */
   const addTodo = (e) => {
     e.preventDefault();
 
@@ -54,27 +59,31 @@ export default function Todos() {
     setTodos(todos.filter((t) => t.id !== id));
   };
 
-  const editTodo = (id) => {
-    const todo = todos.find((t) => t.id === id);
-    if (!todo) return;
-
-    const newTitle = prompt("Ny titel:", todo.title);
-    const newDescription = prompt("Ny beskrivning:", todo.description);
-
-    setTodos(
-      todos.map((t) =>
-        t.id === id
-          ? {
-              ...t,
-              title: newTitle || t.title,
-              description: newDescription || t.description,
-            }
-          : t
-      )
-    );
+  const saveEditedTodo = (updatedTodo) => {
+    setTodos(todos.map((t) => (t.id === updatedTodo.id ? updatedTodo : t)));
+    setEditingTodo(null);
   };
 
-  // ================== RENDER ==================
+  /* ---------- FILTER + SORT ---------- */
+  let filteredTodos = [...todos];
+
+  if (filterCategory !== "alla") {
+    filteredTodos = filteredTodos.filter((t) => t.category === filterCategory);
+  }
+
+  if (sortBy === "deadline") {
+    filteredTodos.sort((a, b) => new Date(a.deadline) - new Date(b.deadline));
+  }
+
+  if (sortBy === "time") {
+    filteredTodos.sort((a, b) => a.time - b.time);
+  }
+
+  if (sortBy === "status") {
+    filteredTodos.sort((a, b) => a.done - b.done);
+  }
+
+  /* ---------- UI ---------- */
   return (
     <div className="todos-page">
       {/* SIDOPANEL */}
@@ -105,9 +114,9 @@ export default function Todos() {
                 value={sortBy}
                 onChange={(e) => setSortBy(e.target.value)}
               >
-                <option value="">Ingen sortering</option>
+                <option value="">Ingen</option>
                 <option value="deadline">Deadline</option>
-                <option value="time">Tid</option>
+                <option value="time">Tidsestimat</option>
                 <option value="status">Status</option>
               </select>
             </div>
@@ -125,61 +134,93 @@ export default function Todos() {
               onChange={(e) => setTitle(e.target.value)}
               required
             />
+
             <input
               placeholder="Beskrivning"
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               required
             />
+
             <input
               type="number"
               placeholder="Tidsestimat"
               value={time}
               onChange={(e) => setTime(e.target.value)}
             />
+
             <input
               type="date"
               value={deadline}
               onChange={(e) => setDeadline(e.target.value)}
             />
+
+            <select
+              value={category}
+              onChange={(e) => setCategory(e.target.value)}
+            >
+              <option value="hälsa">Hälsa</option>
+              <option value="jobb">Jobb</option>
+              <option value="nöje">Nöje</option>
+              <option value="hushåll">Hushåll</option>
+            </select>
+
             <button type="submit">Lägg till</button>
           </form>
         ) : (
           <div className="todo-list">
-            {todos.length === 0 ? (
+            {filteredTodos.length === 0 ? (
               <p>Inga todos ännu</p>
             ) : (
-              todos.map((todo) => (
-                <div key={todo.id} className="todo-card">
-                  <h4>{todo.title}</h4>
-                  <p>{todo.description}</p>
-                  <small>Deadline: {todo.deadline}</small>
+              filteredTodos.map((todo) =>
+                editingTodo?.id === todo.id ? (
+                  <EditTodos
+                    key={todo.id}
+                    todo={todo}
+                    onSave={saveEditedTodo}
+                    onCancel={() => setEditingTodo(null)}
+                  />
+                ) : (
+                  <div
+                    key={todo.id}
+                    className="todo-card"
+                    onClick={() => setEditingTodo(todo)}
+                  >
+                    <div className="todo-header">
+                      <div>
+                        <h4>{todo.title}</h4>
+                        <p>{todo.description}</p>
+                        <small>Deadline: {todo.deadline}</small>
+                      </div>
 
-                  {/* TOGGLE SWITCH */}
-                  <div className="flex items-center gap-2 mt-2">
-                    <label>Klar</label>
-                    <label className="relative inline-flex items-center cursor-pointer">
-                      <input
-                        type="checkbox"
-                        className="sr-only peer"
-                        checked={todo.done}
-                        onChange={() => toggleDone(todo.id)}
-                      />
-                      <div className="w-11 h-6 bg-gray-400 rounded-full transition-colors duration-300 peer-checked:bg-green-500"></div>
-                      <div
-                        className="absolute left-0.5 top-0.5 bg-white w-5 h-5 rounded-full
-                        transition-transform duration-300 peer-checked:translate-x-5"
-                      ></div>
-                    </label>
-                  </div>
+                      <label
+                        onClick={(e) => e.stopPropagation()}
+                        className="relative inline-flex items-center cursor-pointer"
+                      >
+                        <input
+                          type="checkbox"
+                          className="sr-only peer"
+                          checked={todo.done}
+                          onChange={() => toggleDone(todo.id)}
+                        />
+                        <div className="w-11 h-6 bg-gray-400 rounded-full peer-checked:bg-green-500"></div>
+                        <div className="absolute left-0.5 top-0.5 bg-white w-5 h-5 rounded-full peer-checked:translate-x-5 transition-transform"></div>
+                      </label>
+                    </div>
 
-                  {/* ACTIONS */}
-                  <div className="todo-actions">
-                    <button onClick={() => editTodo(todo.id)}>✏</button>
-                    <button onClick={() => deleteTodo(todo.id)}>🗑</button>
+                    <div className="todo-actions">
+                      <button
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          deleteTodo(todo.id);
+                        }}
+                      >
+                        Ta bort
+                      </button>
+                    </div>
                   </div>
-                </div>
-              ))
+                )
+              )
             )}
           </div>
         )}
