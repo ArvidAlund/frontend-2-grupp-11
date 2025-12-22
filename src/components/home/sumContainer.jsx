@@ -19,9 +19,9 @@ const SumContainer = ({ titel, link, list, type }) => {
               <p className="truncate">{item.title}</p>
               {type && (
                 <p className="text-sm text-neutral-400 text-end">
-                  {type === "habit"
-                    ? `repetitioner: ${item.repetitions}`
-                    : `datum: ${new Date(item.startDate).toLocaleDateString("sv-SE", { year: '2-digit', month: 'short', day: 'numeric' })}`}
+                  {type === "habit" && (`repetitioner: ${item.repetitions}`)}
+                  {type === "event" && (`datum: ${new Date(item.startDate).toLocaleDateString("sv-SE", { year: '2-digit', month: 'short', day: 'numeric' })}`)}
+                  {type === "todo" && (item.done ? "Slutförd" : "Ej slutförd")}
                 </p>
               )}
             </li>

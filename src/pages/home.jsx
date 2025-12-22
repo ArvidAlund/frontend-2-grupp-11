@@ -14,6 +14,7 @@ const Home = () => {
   const [author, setAuthor] = useState("");
   const [habitsList, setHabitsList] = useState([]);
   const [eventsList, setEventsList] = useState([]);
+  const [todosList, setTodosList] = useState([]);
 
   useEffect(() => {
     const checkUserStatus = () => {
@@ -40,8 +41,15 @@ const Home = () => {
 
     };
 
+    const fetchTodos = () => {
+      const todos = JSON.parse(localStorage.getItem("todos")) || [];
+      const filteredTodos = todos.filter(todo => !todo.done).splice(0, 3);
+      setTodosList(filteredTodos);
+    };
+
     checkUserStatus();
     getQuote();
+    fetchTodos();
   }, []);
 
   useEffect(() => {
@@ -85,7 +93,7 @@ const Home = () => {
           </div>
       )}
       <div className="grid md:grid-cols-3 mt-10 gap-6 md:w-2/3 w-[95vw]">
-        <SumContainer titel="Todo" link="/todos" list={[]}/>
+        <SumContainer titel="Todo" link="/todos" list={todosList} type="todo"/>
         <SumContainer titel="Vanor" link="/habits" list={habitsList} type="habit"/>
         <SumContainer titel="Event Planner" link="/event-planner" list={eventsList} type="event"/>
       </div>
